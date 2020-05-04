@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_artists"
+        android:icon="@drawable/ic_person_white_24dp"
+        android:title="@string/artists" />
+
+    <item
+        android:id="@+id/navigation_tracks"
+        android:icon="@drawable/ic_library_music_white_24dp"
+        android:title="@string/tracks" />
+</menu>
