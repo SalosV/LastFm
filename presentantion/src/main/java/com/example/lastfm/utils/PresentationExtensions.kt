@@ -5,10 +5,14 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
 import android.os.Handler
+import android.text.*
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
 import android.view.View
 import android.view.View.OnFocusChangeListener
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.TextView
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.lastfm.FMApplication
@@ -69,4 +73,33 @@ fun EditText.hideKeyboard(context: Context) = run {
             imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
         }
     }
+}
+
+fun TextView.fromHtml(text: String) {
+    this.text = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        Html.fromHtml(text, Html.FROM_HTML_MODE_COMPACT)
+    } else {
+        Html.fromHtml(text)
+    }
+}
+
+fun TextView.makeLinks(vararg links: Pair<String, View.OnClickListener>) {
+    val spannableString = SpannableString(this.text)
+    for (link in links) {
+        val clickableSpan = object : ClickableSpan() {
+            override fun onClick(view: View) {
+                Selection.setSelection((view as TextView).text as Spannable, 0)
+                view.invalidate()
+                link.second.onClick(view)
+            }
+        }
+        val startIndexOfLink = this.text.toString().indexOf(link.first)
+        spannableString.setSpan(
+            clickableSpan, startIndexOfLink, startIndexOfLink + link.first.length,
+            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+    }
+    this.movementMethod =
+        LinkMovementMethod.getInstance() // without LinkMovementMethod, link can not click
+    this.setText(spannableString, TextView.BufferType.SPANNABLE)
 }

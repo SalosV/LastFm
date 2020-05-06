@@ -6,4 +6,10 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="search">Buscar</string>
+    <string name="published">Publicación</string>
+    <string name="fan_pages">Página Web</string>
+    <string name="biography">Biografía</string>
+    <string name="artists_similars">Artistas similares</string>
+    <string name="tags">Tags</string>
+    <string name="detail">Detalle</string>
 </resources>
