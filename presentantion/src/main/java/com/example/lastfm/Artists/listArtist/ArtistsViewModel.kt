@@ -45,4 +45,30 @@ class ArtistsViewModel(
                 }
             ).addTo(disposeBag)
     }
+
+    fun searchArtists(query: String) {
+
+        val getSearchArtists =
+            if (app.isInternetAvailable())
+                artistsUc.getSearchArtists(query)
+            else
+                artistsUc.getSearchArtistsLocal(query)
+
+        getSearchArtists
+            .doOnSubscribe {
+                _mutableLiveData.postValue(ArtistsState.Loading)
+            }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy(
+                onSuccess = {
+                    _mutableLiveData.value =
+                        ArtistsState.ShowArtists(it)
+                },
+                onError = {
+                    _mutableLiveData.value =
+                        ArtistsState.Error(it.message.toString())
+                }
+            ).addTo(disposeBag)
+    }
 }

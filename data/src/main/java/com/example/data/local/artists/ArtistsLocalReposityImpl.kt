@@ -17,4 +17,12 @@ class ArtistsLocalReposityImpl(application: DataApp) :
             }
         }
     }
+
+    override fun getSearchArtist(query: String): Single<List<Artists>> = run {
+        with(dataApp.getArtistsDAO()) {
+            searchArtist("%$query%").flatMap {
+                Single.just(it.map { it.toDomain() })
+            }
+        }
+    }
 }

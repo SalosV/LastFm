@@ -3,24 +3,28 @@ package com.example.lastfm.Artists.listArtist
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.view.View.GONE
+import android.view.View.VISIBLE
+import android.widget.EditText
 import android.widget.Toast
+import androidx.appcompat.widget.Toolbar
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.lastfm.Artists.detailArtist.DetailArtistActivity
-import com.example.lastfm.Artists.listArtist.ArtistsState.*
 import com.example.lastfm.Artists.di.ArtistsViewModelComponent
 import com.example.lastfm.Artists.di.ArtistsViewModelModule
+import com.example.lastfm.Artists.listArtist.ArtistsState.*
 import com.example.lastfm.MainActivity
-
 import com.example.lastfm.R
-import com.example.lastfm.utils.app
-import com.example.lastfm.utils.progressHiddenDelay
+import com.example.lastfm.utils.*
+import com.jakewharton.rxbinding2.widget.RxTextView
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+import java.util.concurrent.TimeUnit
 
 class ArtistsFragment : Fragment() {
 
@@ -31,6 +35,8 @@ class ArtistsFragment : Fragment() {
     private lateinit var swipeListArtists: SwipeRefreshLayout
 
     private lateinit var listArtists: RecyclerView
+    private lateinit var searchArtists: EditText
+    private lateinit var toolbar: Toolbar
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,15 +49,43 @@ class ArtistsFragment : Fragment() {
             .plus(ArtistsViewModelModule())
 
         initInstances(view)
+        initToolbar()
         initRecycler()
         initObservers()
 
         return view
     }
 
+    private fun initToolbar() {
+        val menu = R.menu.menu_search
+        toolbar.inflateMenu(menu)
+        toolbar.setOnMenuItemClickListener { item ->
+            val iconSelect = toolbar.menu.findItem(item.itemId)
+
+            when (item.itemId) {
+                R.id.icon_search -> {
+                    toolbar.menu.findItem(R.id.icon_close).isVisible = true
+                    searchArtists.visibility = VISIBLE
+                    searchArtists.openKeyboard(mainActivity)
+                    iconSelect.isVisible = false
+                }
+                R.id.icon_close -> {
+                    toolbar.menu.findItem(R.id.icon_search).isVisible = true
+                    iconSelect.isVisible = false
+                    searchArtists.setText("")
+                    searchArtists.hideKeyboard(mainActivity)
+                    searchArtists.visibility = GONE
+                }
+            }
+            true
+        }
+    }
+
     private fun initInstances(view: View) {
-        listArtists = view.findViewById(R.id.list_artists)
         swipeListArtists = view.findViewById(R.id.swipe_list_artists)
+        listArtists = view.findViewById(R.id.list_artists)
+        toolbar = view.findViewById(R.id.toolbar)
+        searchArtists = view.findViewById(R.id.search_artists)
     }
 
     private fun initRecycler() {
@@ -77,6 +111,18 @@ class ArtistsFragment : Fragment() {
         viewModel.artistsLiveData.observe(mainActivity, Observer {
             renderState(it)
         })
+
+        RxTextView.textChanges(searchArtists)
+            .debounce(200, TimeUnit.MILLISECONDS)
+            .map {
+                if (it.isNotEmpty())
+                    viewModel.searchArtists(it.toString())
+                else
+                    viewModel.getArtists()
+            }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe()
     }
 
     private fun renderState(state: ArtistsState) {

@@ -29,4 +29,12 @@ class ArtistsRepositoryImpl(application: DataApp):
 
             Single.just(it.fromBase().toDomainModel())
         }
+
+    override fun getSearchArtists(query: String) = run {
+        service.getSearchArtists(query).flatMap {
+            Single.just(it.results.artistmatches.artist.map {
+                it.toDomainModel()
+            })
+        }
+    }
 }

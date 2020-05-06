@@ -5,6 +5,10 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
 import android.os.Handler
+import android.view.View
+import android.view.View.OnFocusChangeListener
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.lastfm.FMApplication
@@ -45,4 +49,24 @@ fun Context.isInternetAvailable(): Boolean {
         }
     }
     return result
+}
+
+fun EditText.openKeyboard(context: Context) = run {
+    this.onFocusChangeListener = OnFocusChangeListener { _, _ ->
+        this.post {
+            val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
+        }
+    }
+
+    this.requestFocus()
+}
+
+fun EditText.hideKeyboard(context: Context) = run {
+    this.onFocusChangeListener = OnFocusChangeListener { _, _ ->
+        this.post {
+            val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
+        }
+    }
 }

@@ -25,7 +25,9 @@ class ArtistsAdapter(private val listener: (Artists) -> Unit) : RecyclerView.Ada
 
         fun bind(artist: Artists, listener: (Artists) -> Unit) {
 
-            Picasso.get().load(artist.image[0].text).into(artistsPhoto)
+            if (artist.image[0].text != "") {
+                Picasso.get().load(artist.image[0].text).into(artistsPhoto)
+            }
             artistsName.text = artist.name
 
             itemView.setOnClickListener { listener(artist) }

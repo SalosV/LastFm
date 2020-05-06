@@ -18,4 +18,7 @@ interface ArtistsDAO  {
 
     @Query("DELETE FROM ArtistsEntity")
     fun deleteAllArtists(): Completable
+
+    @Query(value = "SELECT * FROM ArtistsEntity WHERE name LIKE :query")
+    fun searchArtist(query: String): Single<List<ArtistsEntity>>
 }

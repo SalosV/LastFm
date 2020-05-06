@@ -5,4 +5,5 @@ import io.reactivex.Single
 
 interface ArtistsLocalRepository {
     fun getArtist(): Single<List<Artists>>
+    fun getSearchArtist(query: String): Single<List<Artists>>
 }
