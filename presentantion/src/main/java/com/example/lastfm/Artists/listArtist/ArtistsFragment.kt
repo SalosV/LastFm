@@ -1,6 +1,7 @@
 package com.example.lastfm.Artists.listArtist
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -11,6 +12,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.example.lastfm.Artists.detailArtist.DetailArtistActivity
 import com.example.lastfm.Artists.listArtist.ArtistsState.*
 import com.example.lastfm.Artists.di.ArtistsViewModelComponent
 import com.example.lastfm.Artists.di.ArtistsViewModelModule
@@ -56,7 +58,12 @@ class ArtistsFragment : Fragment() {
 
         listArtists.layoutManager = LinearLayoutManager(mainActivity)
         artistsAdapter = ArtistsAdapter {
+            val intent = Intent(mainActivity, DetailArtistActivity::class.java).apply {
+                putExtra("name", it.name)
+                putExtra("mbid", it.mbid)
+            }
 
+            startActivity(intent)
         }
 
         listArtists.adapter = artistsAdapter

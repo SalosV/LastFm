@@ -1,4 +1,4 @@
-package com.example.domain.repository
+package com.example.domain.repository.artists
 
 import com.example.domain.models.BaseArtist
 import io.reactivex.Single

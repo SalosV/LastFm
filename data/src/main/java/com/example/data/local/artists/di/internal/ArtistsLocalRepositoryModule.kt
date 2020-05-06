@@ -1,7 +1,7 @@
 package com.example.data.local.artists.di.internal
 
 import com.example.data.local.artists.ArtistsLocalReposityImpl
-import com.example.domain.repository.ArtistsLocalRepository
+import com.example.domain.repository.artists.ArtistsLocalRepository
 import dagger.Binds
 import dagger.Module
 

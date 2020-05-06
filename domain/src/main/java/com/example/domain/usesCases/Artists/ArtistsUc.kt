@@ -1,9 +1,8 @@
 package com.example.domain.usesCases.Artists
 
 import com.example.domain.models.Artists
-import com.example.domain.models.BaseArtist
-import com.example.domain.repository.ArtistsLocalRepository
-import com.example.domain.repository.ArtistsRepository
+import com.example.domain.repository.artists.ArtistsLocalRepository
+import com.example.domain.repository.artists.ArtistsRepository
 import io.reactivex.Single
 
 interface ArtistsUc {

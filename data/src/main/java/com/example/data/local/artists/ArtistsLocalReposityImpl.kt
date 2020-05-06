@@ -2,10 +2,11 @@ package com.example.data.local.artists
 
 import com.example.data.DataApp
 import com.example.domain.models.Artists
-import com.example.domain.repository.ArtistsLocalRepository
+import com.example.domain.repository.artists.ArtistsLocalRepository
 import io.reactivex.Single
 
-class ArtistsLocalReposityImpl(application: DataApp) : ArtistsLocalRepository {
+class ArtistsLocalReposityImpl(application: DataApp) :
+    ArtistsLocalRepository {
 
     private val dataApp = application.database
 
