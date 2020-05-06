@@ -3,7 +3,7 @@ package com.example.lastfm
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import com.example.lastfm.Artists.ArtistsFragment
+import com.example.lastfm.Artists.listArtist.ArtistsFragment
 import com.example.lastfm.tracks.TracksFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -13,6 +13,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         navigationBottomItemSelect()
+
+        navView.selectedItemId = R.id.navigation_artists
     }
 
     private fun navigationBottomItemSelect() {
