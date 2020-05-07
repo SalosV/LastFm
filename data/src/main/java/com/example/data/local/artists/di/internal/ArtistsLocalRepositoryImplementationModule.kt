@@ -9,5 +9,6 @@ import dagger.Provides
 class ArtistsLocalRepositoryImplementationModule {
 
     @Provides
-    fun artistsLocalRepositoryProvides(app: DataApp) = ArtistsLocalReposityImpl(app)
+    fun artistsLocalRepositoryProvides(app: DataApp) =
+        ArtistsLocalReposityImpl(app)
 }
