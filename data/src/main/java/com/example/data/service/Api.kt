@@ -9,6 +9,7 @@ import com.example.data.METHOD_SEARCH_ARTIST
 import com.example.data.remote.models.DetailArtist
 import com.example.data.remote.models.Result
 import com.example.data.remote.models.TopArtists
+import com.example.data.remote.models.TracksResponse
 import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -40,4 +41,13 @@ interface Api {
         @Query("api_key") apiKey: String = API_KEY,
         @Query("format") format: String = FORMAT
     ): Single<Result>
+
+    @GET("2.0/")
+    fun getTracks(
+        @Query("method") method: String = METHOD_TOP_TRACKS,
+        @Query("country") country: String = COUNTRY,
+        @Query("api_key") apiKey: String = API_KEY,
+        @Query("format") format: String = FORMAT,
+        @Query("limit") limit: Int = 10
+    ): Single<TracksResponse>
 }

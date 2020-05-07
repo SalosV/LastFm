@@ -1,4 +1,4 @@
-package com.example.data.remote.repository
+package com.example.data.remote.repository.artists
 
 import com.example.data.DataApp
 import com.example.data.remote.models.fromBase
