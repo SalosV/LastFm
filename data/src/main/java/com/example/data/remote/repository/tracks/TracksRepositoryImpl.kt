@@ -1,9 +1,11 @@
 package com.example.data.remote.repository.tracks
 
 import com.example.data.DataApp
+import com.example.data.remote.models.toDomain
 import com.example.data.remote.models.toDomainModel
 import com.example.data.remote.models.toEntityModel
 import com.example.data.service.ServiceManager.service
+import com.example.domain.models.Track
 import com.example.domain.repository.tracks.TracksRepository
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -26,4 +28,12 @@ class TracksRepositoryImpl(application: DataApp): TracksRepository {
 
             Single.just(it.tracks.track.map { it.toDomainModel() })
         }
+
+    override fun getSearchTracks(query: String): Single<List<Track>> = run {
+        service.getSearchTracks(query).flatMap {
+            Single.just(it.results.trackmatches.track.map {
+                it.toDomain()
+            })
+        }
+    }
 }

@@ -19,7 +19,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <EditText
-            android:id="@+id/search_artists"
+            android:id="@+id/search_tracks"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/search"
@@ -29,7 +29,7 @@
     </androidx.appcompat.widget.Toolbar>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipe_list_artists"
+        android:id="@+id/swipe_list_tracks"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:scrollbars="horizontal"
@@ -39,7 +39,7 @@
         app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/list_artists"
+            android:id="@+id/list_tracks"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

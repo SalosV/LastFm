@@ -1,13 +1,21 @@
 package com.example.data.remote.models
 
-data class Result(
-    val results: ArtistMatches
+data class Result<T>(
+    val results: T
 )
 
 data class ArtistMatches(
-    val artistmatches: InformationMatchs
+    val artistmatches: InformationMatches
 )
 
-data class InformationMatchs(
+data class InformationMatches(
     val artist: List<ArtistsResponse>
+)
+
+data class TrackMatches(
+    val trackmatches: InformationMatchesTracks
+)
+
+data class InformationMatchesTracks(
+    val track: List<TracksSearch>
 )

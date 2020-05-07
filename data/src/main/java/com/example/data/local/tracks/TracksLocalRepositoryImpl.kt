@@ -16,4 +16,12 @@ class TracksLocalRepositoryImpl(application: DataApp) : TracksLocalRepository {
             }
         }
     }
+
+    override fun getSearchTacks(query: String): Single<List<Track>> = run {
+        with(dataApp.getTracksDAO()) {
+            searchTrack("%$query%").flatMap {
+                Single.just(it.map { it.toDomain() })
+            }
+        }
+    }
 }

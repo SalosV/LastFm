@@ -26,7 +26,6 @@ fun Track.toEntityModel() = TracksEntity(
     image = image
 )
 
-
 fun Track.toDomainModel() = TrackDomain(
     name,
     duration,

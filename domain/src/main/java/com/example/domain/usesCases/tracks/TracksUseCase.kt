@@ -8,6 +8,8 @@ import io.reactivex.Single
 interface TracksUseCase {
     fun getTracks(): Single<List<Track>>
     fun getTracksLocal(): Single<List<Track>>
+    fun getSearchTracks(query: String): Single<List<Track>>
+    fun getSearchTracksLocal(query: String): Single<List<Track>>
 }
 
 class TracksUseCaseImpl(
@@ -20,4 +22,12 @@ class TracksUseCaseImpl(
 
     override fun getTracksLocal(): Single<List<Track>> =
         tracksLocalRepository.getTracks()
+
+    override fun getSearchTracks(query: String): Single<List<Track>> = run {
+        tracksRepository.getSearchTracks(query)
+    }
+
+    override fun getSearchTracksLocal(query: String): Single<List<Track>> = run {
+        tracksLocalRepository.getSearchTacks(query)
+    }
 }

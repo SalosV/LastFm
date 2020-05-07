@@ -1,5 +1,6 @@
 package com.example.lastfm.tracks.listTracks
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.data.DataApp
@@ -39,6 +40,32 @@ class TracksViewModel(
                 },
                 onError = {
                     _tracksMutableLiveData.value = TracksState.Error(it.message.toString())
+                }
+            ).addTo(disposeBag)
+    }
+
+    fun searchTracks(query: String) {
+        val getSearchArtists =
+            if (app.isInternetAvailable())
+                tracksUseCase.getSearchTracks(query)
+            else
+                tracksUseCase.getSearchTracksLocal(query)
+
+        getSearchArtists
+            .doOnSubscribe {
+                _tracksMutableLiveData.postValue(TracksState.Loading)
+            }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy(
+                onSuccess = {
+                    _tracksMutableLiveData.value =
+                        TracksState.ShowTracks(it)
+                },
+                onError = {
+                    Log.e("error", it.message.toString())
+                    _tracksMutableLiveData.value =
+                        TracksState.Error(it.message.toString())
                 }
             ).addTo(disposeBag)
     }

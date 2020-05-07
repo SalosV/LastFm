@@ -5,4 +5,5 @@ import io.reactivex.Single
 
 interface TracksRepository {
     fun getTracks(): Single<List<Track>>
+    fun getSearchTracks(query: String): Single<List<Track>>
 }

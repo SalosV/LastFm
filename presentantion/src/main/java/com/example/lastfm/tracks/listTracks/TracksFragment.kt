@@ -21,7 +21,13 @@ import com.example.lastfm.tracks.di.TracksViewModelModule
 import com.example.lastfm.tracks.listTracks.TracksState.Error
 import com.example.lastfm.tracks.listTracks.TracksState.ShowTracks
 import com.example.lastfm.utils.app
+import com.example.lastfm.utils.hideKeyboard
+import com.example.lastfm.utils.openKeyboard
 import com.example.lastfm.utils.progressHiddenDelay
+import com.jakewharton.rxbinding2.widget.RxTextView
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+import java.util.concurrent.TimeUnit
 
 class TracksFragment : Fragment() {
 
@@ -30,9 +36,9 @@ class TracksFragment : Fragment() {
     private lateinit var mainActivity: MainActivity
     private lateinit var tracksAdapter: TracksAdapter
 
-    private lateinit var swipeListArtists: SwipeRefreshLayout
-    private lateinit var listArtists: RecyclerView
-    private lateinit var searchArtists: EditText
+    private lateinit var swipeListTracks: SwipeRefreshLayout
+    private lateinit var listTracks: RecyclerView
+    private lateinit var searchTracks: EditText
     private lateinit var toolbar: Toolbar
 
     override fun onCreateView(
@@ -46,51 +52,89 @@ class TracksFragment : Fragment() {
             .plusTracks(TracksViewModelModule())
 
         initInstances(view)
+        initToolbar()
         initRecycler()
         initObservables()
         return view
+    }
+
+    private fun initToolbar() {
+        val menu = R.menu.menu_search
+        toolbar.inflateMenu(menu)
+        toolbar.setOnMenuItemClickListener { item ->
+            val iconSelect = toolbar.menu.findItem(item.itemId)
+
+            when (item.itemId) {
+                R.id.icon_search -> {
+                    toolbar.menu.findItem(R.id.icon_close).isVisible = true
+                    searchTracks.visibility = View.VISIBLE
+                    searchTracks.openKeyboard(mainActivity)
+                    iconSelect.isVisible = false
+                }
+                R.id.icon_close -> {
+                    toolbar.menu.findItem(R.id.icon_search).isVisible = true
+                    iconSelect.isVisible = false
+                    searchTracks.setText("")
+                    searchTracks.hideKeyboard(mainActivity)
+                    searchTracks.visibility = View.GONE
+                }
+            }
+            true
+        }
     }
 
     private fun initObservables() {
         viewModel.tracksLiveData.observe(mainActivity, Observer {
             renderState(it)
         })
+
+        RxTextView.textChanges(searchTracks)
+            .debounce(200, TimeUnit.MILLISECONDS)
+            .map {
+                if (it.isNotEmpty())
+                    viewModel.searchTracks(it.toString())
+                else
+                    viewModel.getTracks()
+            }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe()
     }
 
     private fun renderState(state: TracksState) {
         when(state) {
             is TracksState.Loading -> {
-                swipeListArtists.isRefreshing = true
+                swipeListTracks.isRefreshing = true
             }
             is ShowTracks -> {
                 tracksAdapter.tracks = state.tracks
-                swipeListArtists.progressHiddenDelay()
+                swipeListTracks.progressHiddenDelay()
             }
             is Error -> {
                 Toast.makeText(mainActivity, state.msg, Toast.LENGTH_SHORT).show()
-                swipeListArtists.progressHiddenDelay()
+                swipeListTracks.progressHiddenDelay()
             }
         }
     }
 
     private fun initInstances(view: View) {
-        swipeListArtists = view.findViewById(R.id.swipe_list_artists)
-        listArtists = view.findViewById(R.id.list_artists)
+        swipeListTracks = view.findViewById(R.id.swipe_list_tracks)
+        listTracks = view.findViewById(R.id.list_tracks)
         toolbar = view.findViewById(R.id.toolbar)
-        searchArtists = view.findViewById(R.id.search_artists)
+        searchTracks = view.findViewById(R.id.search_tracks)
     }
 
     private fun initRecycler() {
 
-        listArtists.layoutManager = LinearLayoutManager(mainActivity)
+        listTracks.layoutManager = LinearLayoutManager(mainActivity)
 
         tracksAdapter = TracksAdapter {
 
         }
 
-        listArtists.adapter = tracksAdapter
+        listTracks.adapter = tracksAdapter
 
-        swipeListArtists.setOnRefreshListener {
+        swipeListTracks.setOnRefreshListener {
             viewModel.getTracks()
         }
     }
