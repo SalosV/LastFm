@@ -19,7 +19,7 @@ interface Api {
         @Query("country") country: String = COUNTRY,
         @Query("api_key") apiKey: String = API_KEY,
         @Query("format") format: String = FORMAT,
-        @Query("limit") limit: Int = 10
+        @Query("limit") limit: Int = 40
     ): Single<TopArtists>
 
     @GET("2.0/")
@@ -45,7 +45,7 @@ interface Api {
         @Query("country") country: String = COUNTRY,
         @Query("api_key") apiKey: String = API_KEY,
         @Query("format") format: String = FORMAT,
-        @Query("limit") limit: Int = 10
+        @Query("limit") limit: Int = 40
     ): Single<TracksResponse>
 
     @GET("2.0/")
