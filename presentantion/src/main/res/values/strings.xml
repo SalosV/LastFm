@@ -12,4 +12,7 @@
     <string name="artists_similars">Artistas similares</string>
     <string name="tags">Tags</string>
     <string name="detail">Detalle</string>
+    <string name="wiki">Wiki</string>
+    <string name="n_plays">Número de reproducciones</string>
+    <string name="artist">Artista</string>
 </resources>

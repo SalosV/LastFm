@@ -18,10 +18,6 @@ data class InformationArtist(
     val similar: Similar
 )
 
-data class Tags(
-    val tag: List<Tag>
-)
-
 data class Similar(
     val artist: List<ArtistsSimilar>
 )

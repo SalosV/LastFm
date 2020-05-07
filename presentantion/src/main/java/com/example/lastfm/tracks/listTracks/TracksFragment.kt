@@ -1,6 +1,7 @@
 package com.example.lastfm.tracks.listTracks
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -16,6 +17,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.lastfm.MainActivity
 
 import com.example.lastfm.R
+import com.example.lastfm.tracks.detailTrack.DetailTrackActivity
 import com.example.lastfm.tracks.di.TracksViewModelComponent
 import com.example.lastfm.tracks.di.TracksViewModelModule
 import com.example.lastfm.tracks.listTracks.TracksState.Error
@@ -130,6 +132,12 @@ class TracksFragment : Fragment() {
 
         tracksAdapter = TracksAdapter {
 
+            val intent = Intent(mainActivity, DetailTrackActivity::class.java).apply {
+                putExtra("artist", it.artist.name)
+                putExtra("track", it.name)
+            }
+
+            startActivity(intent)
         }
 
         listTracks.adapter = tracksAdapter

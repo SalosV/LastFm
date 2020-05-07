@@ -55,4 +55,13 @@ interface Api {
         @Query("api_key") apiKey: String = API_KEY,
         @Query("format") format: String = FORMAT
     ): Single<Result<TrackMatches>>
+
+    @GET("2.0/")
+    fun getDetailTrack(
+        @Query("artist") artist: String,
+        @Query("track") track: String,
+        @Query("method") method: String = METHOD_DETAIL_TRACK,
+        @Query("api_key") apiKey: String = API_KEY,
+        @Query("format") format: String = FORMAT
+    ): Single<DetailTrack>
 }

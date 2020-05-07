@@ -14,6 +14,6 @@ class ArtistsRepositoryImplementationModule {
         ArtistsRepositoryImpl(app)
 
     @Provides
-    fun detailArtistRepositoryImpl(app: DataApp) =
-        DetailArtistRepositoryImp(app)
+    fun detailArtistRepositoryImpl() =
+        DetailArtistRepositoryImp()
 }

@@ -63,7 +63,6 @@ class TracksViewModel(
                         TracksState.ShowTracks(it)
                 },
                 onError = {
-                    Log.e("error", it.message.toString())
                     _tracksMutableLiveData.value =
                         TracksState.Error(it.message.toString())
                 }

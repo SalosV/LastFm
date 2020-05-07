@@ -82,8 +82,8 @@ class DetailArtistActivity : AppCompatActivity() {
                 progress.visibility = GONE
             }
             is Error -> {
-                Toast.makeText(this, state.msg, Toast.LENGTH_SHORT).show()
                 progress.visibility = GONE
+                Toast.makeText(this, state.msg, Toast.LENGTH_SHORT).show()
             }
             is Loading -> {
                 progress.visibility = VISIBLE
